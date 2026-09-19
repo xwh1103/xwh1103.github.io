@@ -1,0 +1,80 @@
+# Hexo 站点配置
+# 文档：https://hexo.io/zh-cn/docs/configuration
+
+title: 拾光笔记
+subtitle: 记录技术、设计与生活的微光
+description: 一个关于技术实践、设计思考与日常生活的个人博客
+keywords: Hexo, Fluid, 静态博客, 技术, 设计, 生活
+author: xwh
+language: zh-CN
+timezone: Asia/Shanghai
+
+# GitHub Actions 发布时会自动替换下面两项
+url: http://localhost:4000
+root: /
+permalink: posts/:title/
+permalink_defaults:
+pretty_urls:
+  trailing_index: false
+  trailing_html: false
+
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+skip_render:
+
+new_post_name: :title.md
+default_layout: post
+titlecase: false
+external_link:
+  enable: true
+  field: site
+  exclude: ''
+filename_case: 0
+render_drafts: false
+post_asset_folder: true
+relative_link: false
+future: false
+syntax_highlighter: highlight.js
+highlight:
+  line_number: true
+  auto_detect: false
+  tab_replace: ''
+  wrap: true
+  hljs: false
+
+index_generator:
+  path: ''
+  per_page: 8
+  order_by: -date
+
+default_category: 随笔
+category_map:
+tag_map:
+
+meta_generator: true
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+updated_option: mtime
+per_page: 10
+pagination_dir: page
+include:
+exclude:
+ignore:
+
+theme: fluid
+
+# 本地搜索索引
+search:
+  path: local-search.xml
+  field: post
+  content: true
+  format: html
+
+deploy:
+  type: ''
+
