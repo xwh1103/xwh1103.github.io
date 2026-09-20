@@ -1,86 +1,304 @@
-# 拾光笔记：Hexo + Fluid 静态博客
+# 拾光笔记
 
-这是一个已经配置好的中文静态博客，采用 **Hexo + Fluid + GitHub Pages**。
+> 记录技术、设计与生活的微光。
 
-## 1. 本地预览
+这是 **xwh** 的个人静态博客，使用 [Hexo](https://hexo.io/) 和 [Fluid](https://github.com/fluid-dev/hexo-theme-fluid) 构建，通过 GitHub Actions 自动发布到 GitHub Pages。
 
-请先安装 Node.js 22（或兼容版本）和 npm，然后在本目录执行：
+- 博客地址：<https://xwh1103.github.io/>
+- GitHub 仓库：<https://github.com/xwh1103/xwh1103.github.io>
+- 当前分支：`main`
+- 本地预览地址：<http://localhost:4000/>
 
-```bash
+## 技术组成
+
+- Node.js 24
+- npm
+- Hexo 7
+- Fluid 主题
+- GitHub Actions
+- GitHub Pages
+
+## 快速开始
+
+### 1. 进入博客目录
+
+```powershell
+cd "C:\Users\xwh\Documents\Codex\2026-09-19\ji\outputs\hexo-blog"
+```
+
+### 2. 安装依赖
+
+首次使用、重新下载项目或删除了 `node_modules` 后执行：
+
+```powershell
 npm install
+```
+
+日常写文章不需要重复安装依赖。
+
+### 3. 启动本地预览
+
+```powershell
 npm run server
 ```
 
-浏览器打开：`http://localhost:4000`
+浏览器打开：<http://localhost:4000/>
 
-停止预览时按 `Ctrl + C`。
+停止服务时在 PowerShell 中按 `Ctrl+C`。
 
-## 2. 修改个人信息
+## 新建和编辑文章
 
-主要修改两个文件：
+### 新建文章
 
-- `_config.yml`：站点标题、副标题、描述、作者；
-- `_config.fluid.yml`：导航、首页标语、头像、GitHub、邮箱和页脚。
-
-示例中的 `你的名字`、`你的用户名` 和 `hello@example.com` 都需要替换。
-
-## 3. 写一篇新文章
-
-```bash
-npx hexo new "我的新文章"
+```powershell
+npm run new -- "文章标题"
 ```
 
-打开 `source/_posts/我的新文章.md`，使用 Markdown 写作。建议保留这类头部信息：
+例如：
+
+```powershell
+npm run new -- "2026.9.21-2026.9.27"
+```
+
+文章会生成在：
+
+```text
+source/_posts/
+```
+
+### 文章头部示例
 
 ```yaml
 ---
-title: 我的新文章
-date: 2026-09-19 12:00:00
+title: 文章标题
+date: 2026-09-20 12:00:00
 categories:
-  - 技术实践
+  - 生活随笔
 tags:
-  - Hexo
-index_img: /img/post-hexo.svg
-banner_img: /img/post-hexo.svg
+  - 生活记录
+index_img: /img/post-life.svg
+banner_img: /img/post-life.svg
 ---
 ```
 
-构建检查：
+其中：
 
-```bash
+- `index_img`：博客首页文章卡片的封面图；
+- `banner_img`：进入文章后顶部的大背景图；
+- 图片统一放在 `source/img/` 目录；
+- `/img/example.png` 对应本地文件 `source/img/example.png`。
+
+## 本地构建
+
+发布前建议检查网站能否正常生成：
+
+```powershell
 npm run build
 ```
 
-生成的网站位于 `public/`。
+生成结果位于 `public/`。`public/` 是自动生成目录，不需要手动编辑。
 
-## 4. 发布到 GitHub Pages
+如果页面缓存异常，可以执行：
 
-1. 在 GitHub 新建一个仓库，例如 `my-blog`；
-2. 把本目录中的文件提交并推送到仓库的 `main` 分支；
-3. 进入仓库 **Settings → Pages**；
-4. 在 **Build and deployment → Source** 选择 **GitHub Actions**；
-5. 打开 **Actions**，等待 `Deploy Hexo to GitHub Pages` 完成。
+```powershell
+npm run clean
+npm run server
+```
 
-工作流会自动判断仓库类型：
+然后在浏览器中按 `Ctrl+F5` 强制刷新。
 
-- 仓库名为 `用户名.github.io`：发布到 `https://用户名.github.io/`；
-- 其他仓库名：发布到 `https://用户名.github.io/仓库名/`。
+## 发布到 GitHub Pages
 
-## 5. 常用命令
+修改文章、图片或配置后，依次执行：
 
-| 命令 | 用途 |
+```powershell
+git add -A
+git commit -m "更新博客文章"
+git push
+```
+
+命令作用：
+
+| 命令 | 作用 |
 |---|---|
-| `npm run server` | 本地预览 |
-| `npm run build` | 清理并生成静态页面 |
-| `npx hexo new "标题"` | 新建文章 |
-| `npx hexo new draft "标题"` | 新建草稿 |
-| `npx hexo publish "标题"` | 将草稿发布为文章 |
+| `git add -A` | 把新增、修改和删除的文件加入本次提交 |
+| `git commit -m "说明"` | 在本地保存一次版本记录 |
+| `git push` | 把版本上传到 GitHub |
 
-## 6. 博客园同步（可选）
+推送到 `main` 分支后，`.github/workflows/pages.yml` 会自动：
 
-参考教程还包含 Open API 同步博客园。此功能需要博客园的 Client ID、Client Secret 等敏感信息，不应写进仓库。建议等 GitHub Pages 正常发布后，再把凭据放入 GitHub Actions Secrets 中，并单独增加同步工作流。
-## 7. 完整操作手册
+1. 安装 npm 依赖；
+2. 生成 Hexo 静态网站；
+3. 部署到 GitHub Pages。
 
-头像、简介、文章编辑、本地预览和 GitHub Pages 发布等完整说明，请查看：
+可以在 GitHub 仓库的 **Actions** 页面查看 `Deploy Hexo to GitHub Pages`。绿色对勾表示发布成功。
+
+> GitHub 仓库的 **Settings → Pages → Source** 应设置为 **GitHub Actions**。
+
+## 日常操作流程
+
+```powershell
+# 1. 进入博客目录
+cd "C:\Users\xwh\Documents\Codex\2026-09-19\ji\outputs\hexo-blog"
+
+# 2. 本地预览
+npm run server
+
+# 3. 编辑完成后按 Ctrl+C 停止服务，再检查构建
+npm run build
+
+# 4. 查看修改
+git status
+
+# 5. 保存并上传
+git add -A
+git commit -m "更新博客文章"
+git push
+```
+
+
+## 一键脚本
+
+项目根目录提供了三个 Windows 快捷脚本：
+
+| 文件 | 用途 |
+|---|---|
+| `启动博客.cmd` | 启动本地预览 |
+| `新建文章.cmd` | 输入标题并创建文章 |
+| `生成网站.cmd` | 清理并生成静态网站 |
+
+不想输入命令时，可以直接双击对应脚本。
+
+## 常用检查命令
+
+```powershell
+# 查看文件修改状态
+git status
+
+# 查看最近 5 次提交
+git log --oneline -5
+
+# 查看当前分支
+git branch --show-current
+
+# 查看 GitHub 远程地址
+git remote -v
+
+# 查看 Node.js 和 npm 版本
+node --version
+npm --version
+```
+
+## SSH 连接测试
+
+仅在 `git push` 连接失败时使用：
+
+```powershell
+ssh -T -p 443 -i "C:\Users\xwh\.ssh\id_ed25519_github_xwh1103" -o IdentitiesOnly=yes git@ssh.github.com
+```
+
+验证成功时会显示：
+
+```text
+Hi xwh1103! You've successfully authenticated, but GitHub does not provide shell access.
+```
+
+如果提示输入 `passphrase`，输入创建 SSH 密钥时设置的密码。输入过程中不会显示字符。
+
+> 只能分享带 `.pub` 后缀的公钥，绝对不要分享没有 `.pub` 后缀的私钥。
+
+## 个性化配置
+
+| 内容 | 文件或目录 |
+|---|---|
+| 网站标题、作者、描述 | `_config.yml` |
+| Fluid 外观、头像、简介、导航 | `_config.fluid.yml` |
+| 关于页面 | `source/about/index.md` |
+| 博客文章 | `source/_posts/` |
+| 图片资源 | `source/img/` |
+| GitHub Pages 工作流 | `.github/workflows/pages.yml` |
+
+## 项目结构
+
+```text
+hexo-blog/
+├─ .github/workflows/pages.yml  # GitHub Pages 自动部署
+├─ scaffolds/                   # 新文章模板
+├─ source/
+│  ├─ _posts/                   # 博客文章
+│  ├─ about/                    # 关于页面
+│  └─ img/                      # 图片资源
+├─ themes/fluid/                # Fluid 主题
+├─ _config.yml                  # Hexo 网站配置
+├─ _config.fluid.yml            # Fluid 主题配置
+├─ package.json                 # npm 命令和依赖
+├─ package-lock.json            # npm 依赖锁定文件
+├─ 启动博客.cmd
+├─ 新建文章.cmd
+├─ 生成网站.cmd
+└─ 拾光笔记-完整操作指南.md
+```
+
+## 常见问题
+
+### `npm server` 提示 Unknown command
+
+错误写法：
+
+```powershell
+npm server
+```
+
+正确写法：
+
+```powershell
+npm run server
+```
+
+### PowerShell 禁止运行 `npm.ps1` 或 `npx.ps1`
+
+可以使用 `.cmd` 版本：
+
+```powershell
+npm.cmd run server
+npx.cmd hexo new "文章标题"
+```
+
+### 修改后页面没有变化
+
+1. 保存修改过的文件；
+2. 重新执行 `npm run build`；
+3. 重新执行 `npm run server`；
+4. 在浏览器中按 `Ctrl+F5`。
+
+### GitHub Pages 发布失败
+
+进入 GitHub 仓库的 **Actions** 页面，打开带红色叉号的运行记录，查看失败步骤最后几行错误。
+
+### 图片在网上不显示
+
+检查：
+
+- 图片是否放在 `source/img/`；
+- Markdown 或配置中的路径是否以 `/img/` 开头；
+- 文件名大小写是否完全一致；
+- 图片是否已经通过 Git 提交并推送；
+- 文件名尽量不要包含中文、空格和特殊字符。
+
+## 注意事项
+
+- 本项目统一使用 **npm**，不要同时混用 pnpm 或 yarn；
+- 不需要手动上传 `public/` 文件夹；
+- 不需要日常执行 `npm run deploy`；
+- 不要把密码、令牌、私钥或其他敏感信息提交到 GitHub；
+- 不确定修改是否正确时，先运行 `git status`，不要使用 `git push --force`。
+
+## 详细文档
+
+更多关于头像、简介、文章编辑、图片设置和 GitHub Pages 的说明，请阅读：
 
 - [`拾光笔记-完整操作指南.md`](./拾光笔记-完整操作指南.md)
+
+---
+
+最后更新：2026-09-20
